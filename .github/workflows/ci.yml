@@ -63,7 +63,7 @@ jobs:
           context: ./backend
           file: ./backend/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository }}/backend:${{ github.sha }}
+          tags: ghcr.io/rizkylaksmitha/uts-pl-24-543122-sv-25155/backend:${{ github.sha }}
 
       - name: Build and Push Frontend Image
         uses: docker/build-push-action@v5
@@ -71,4 +71,4 @@ jobs:
           context: ./frontend
           file: ./frontend/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
+          tags: ghcr.io/rizkylaksmitha/uts-pl-24-543122-sv-25155/frontend:${{ github.sha }}
