@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: myevent_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-myevent}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-secret123}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - myevent_network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: myevent_backend
+    restart: always
+    environment:
+      APP_ENV: production
+      APP_KEY: base64:c42lXz3/KxW7x9yZ9V2kL1mN3oP5qR7sT9uV1wX3yZ0=
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: ${DB_DATABASE:-myevent}
+      DB_USERNAME: root
+      DB_PASSWORD: ${DB_PASSWORD:-secret123}
+    depends_on:
+      - db
+    networks:
+      - myevent_network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: myevent_frontend
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - backend
+    networks:
+      - myevent_network
+
+volumes:
+  db_data:
+
+networks:
+  myevent_network:
+    driver: bridge
